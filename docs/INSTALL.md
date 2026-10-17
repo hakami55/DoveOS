@@ -30,6 +30,8 @@ The release will identify which writer was actually used for acceptance.
 
 The dock's existing firmware launches the USB environment. There is no PC-style
 BIOS boot menu or firmware replacement step in this installation.
+The optional startup logo requires the matching splash hook already installed
+in the dock; the USB image alone does not install that internal hook.
 
 ## Everyday use
 
