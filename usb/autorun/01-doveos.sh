@@ -12,7 +12,15 @@ test -f "$B/start-desktop.sh"
 expected=cb3b26154ce5f07113c614a2d7f03c59ac113333340f96966c31f9e7cdb295c2
 actual=$(sha256sum /usr/local/bin/IMS_Modules/wfd_dfb | cut -d ' ' -f 1)
 test "$actual" = "$expected" || { echo DOVEOS_FIRMWARE_BUILD_UNSUPPORTED;exit 4; }
-mkdir -p "$R/lib" "$R/keys" "$B/home" "$U/DrMoSa/WiFi" "$U/DrMoSa/keys"
+mkdir -p "$R/lib" "$B/home" "$U/DrMoSa/WiFi" "$U/DrMoSa/keys"
+# Pairing data is generated for this USB by Moonlight on first use. Keeping
+# its data directory on USB preserves new pairings across full restarts.
+if [ -L "$R/keys" ];then
+ test "$(readlink "$R/keys")" = "$U/DrMoSa/keys" || exit 4
+elif [ -e "$R/keys" ];then
+ rmdir "$R/keys" 2>/dev/null || { echo DOVEOS_PRIVATE_RUNTIME_RESTART_REQUIRED;exit 4; }
+fi
+if [ ! -L "$R/keys" ];then ln -s "$U/DrMoSa/keys" "$R/keys";fi
 if ! /bin/sh "$B/Memory/assets-runtime.sh" legacy;then
  cp "$U"/DrMoSa/lib/* "$R/lib/"
  for pair in dock-stream-hw:dock-stream-hw drmosa-moonlight-stop:moonlight-stop drmosa-hdmi-viewer:hdmi-viewer drmosa-media-player:media-player drmosa-media-fb-mirror:media-fb-mirror doveos-control:doveos-control dock-moonlight-pair:moonlight-pair dock-check-pair:moonlight-check dock-discover-pc:moonlight-discover;do
@@ -21,10 +29,6 @@ if ! /bin/sh "$B/Memory/assets-runtime.sh" legacy;then
 fi
 for name in settings.sh wifi.sh wifi-dhcp.sh;do
  cp "$U/DrMoSa/$name" "$R/$name";chmod 700 "$R/$name"
-done
-for file in "$U"/DrMoSa/keys/*;do
- test -f "$file" || continue
- cp "$file" "$R/keys/";chmod 600 "$R/keys/${file##*/}"
 done
 chmod 700 "$R/lib/ld-linux-armhf.so.3"
 # New users configure their own network in Control Panel. No network is seeded.
