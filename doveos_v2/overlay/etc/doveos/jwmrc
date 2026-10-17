@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<JWM>
+ <IconPath>/etc/doveos</IconPath>
+ <IconPath>/etc/doveos/classic-icons/24</IconPath>
+ <RootMenu onroot="12" label="DoveOS LapDock" labeled="true" height="26">
+ <Program label="About DoveOS" icon="about-alert.png">/tmp/doveos-theme/doveos-open DoveAbout /usr/bin/doveos-settings-ui about</Program>
+ <Separator />
+ <Menu height="14" label="Programs" icon="folder.png">
+  <Program label="Browser (NetSurf)" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/browser-24.png">/tmp/doveos-theme/doveos-open netsurf-gtk /tmp/doveos-theme/doveos-light-app browser</Program>
+  <Program label="DoveBrowser (Preview)" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/browser-24.png">/tmp/doveos-theme/doveos-open DoveBrowser /bin/sh /media/usb0/DoveOS-v2/ModernBrowser/launch.sh</Program>
+  <Program label="Word Processor (AbiWord)" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/word-24.png">/tmp/doveos-theme/doveos-open Abiword /tmp/doveos-theme/doveos-light-app word</Program>
+  <Program label="PDF Viewer (MuPDF)" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/pdf-24.png">/tmp/doveos-theme/doveos-open MuPDF /tmp/doveos-theme/doveos-light-app pdf</Program>
+  <Program label="Files" icon="folder.png">/bin/sh /media/usb0/DoveOS-v2/Explorer/launch.sh /media/usb0/DrMoSa/Documents</Program>
+  <Program label="Notepad" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/notepad-24.png">/tmp/doveos-theme/doveos-open DoveNotepad /bin/sh /media/usb0/DoveOS-v2/ClassicApps/launch.sh notepad</Program>
+  <Program label="Calculator" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/calculator-24.png">/tmp/doveos-theme/doveos-open xcalc xcalc</Program>
+  <Program label="SDK 2 Demo" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/sdk-24.png">/tmp/doveos-theme/doveos-open doveos-sdk-v2 /tmp/doveos-theme/doveos-sdk-v2</Program>
+  
+  
+  <Separator />
+  <Program label="Moonlight" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/moonlight.png">/tmp/doveos-theme/doveos-open doveos-control-x /usr/bin/doveos-moonlight</Program>
+  <Program label="Minesweeper" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/mines-24.png">/usr/bin/doveos-games</Program>
+  <Program label="DoveAir" icon="/media/usb0/DoveOS-v2/AppIcons/dove-airplay-v2.png">/tmp/doveos-theme/doveos-open doveos-airplay-ui /bin/sh /media/usb0/DoveOS-v2/AirPlay/launch.sh</Program>
+  <Program label="DoveDeX" icon="/media/usb0/DoveOS-v2/AppIcons/dove-dex-v2.png">/tmp/doveos-theme/doveos-open dovedex /bin/sh /media/usb0/DoveOS-v2/dovedex/launch.sh</Program>
+ </Menu>
+ <Menu height="14" label="Media" icon="folder-music.png">
+  <Program label="Media files" icon="folder.png">/bin/sh /media/usb0/DoveOS-v2/Explorer/launch.sh /media/usb0/DrMoSa/Media</Program>
+  <Program label="VLC Media Player (trial)" icon="vlc.png">/usr/bin/doveos-vlc</Program>
+  <Program label="DovePlayer" icon="/media/usb0/DoveOS-v2/DovePlayer/icon.png">/bin/sh /media/usb0/DoveOS-v2/DovePlayer/launch.sh</Program>
+ </Menu>
+ <Menu height="14" label="Settings" icon="preferences-system.png">
+  <Program label="Control Panel" icon="preferences-system.png">/tmp/doveos-theme/doveos-open DoveSettings /usr/bin/doveos-settings-ui</Program>
+  <Program label="Network" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/network-24.png">/tmp/doveos-theme/doveos-open DoveSettings --page 0 /usr/bin/doveos-settings-ui network</Program>
+  <Program label="Bluetooth" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/bluetooth-24.png">/tmp/doveos-theme/doveos-open DoveSettings --page 1 /usr/bin/doveos-settings-ui bluetooth</Program>
+  <Program label="Display" icon="/etc/doveos/classic-icons/24/preferences-desktop-display.png">/tmp/doveos-theme/doveos-open DoveSettings --page 2 /usr/bin/doveos-settings-ui display</Program>
+  <Program label="Date &amp; Time" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/time-24.png">/tmp/doveos-theme/doveos-open DoveSettings --page 5 /usr/bin/doveos-settings-ui datetime</Program>
+  <Program label="Sound" icon="/media/usb0/DoveOS-v2/ClassicApps/icons/sound-24.png">/tmp/doveos-theme/doveos-open DoveSettings --page 3 /usr/bin/doveos-settings-ui sound</Program>
+ </Menu>
+ <Program label="Find" icon="system-search.png">/tmp/doveos-theme/doveos-open pcmanfm pcmanfm --find-files /media/usb0</Program>
+ <Program label="Terminal" icon="utilities-terminal.png">/tmp/doveos-theme/doveos-open xterm xterm</Program>
+ <Separator />
+ <Program label="Power..." icon="preferences-system.png" tooltip="Stand by, restart, renderer mode or safely unmount USB.">/tmp/doveos-theme/doveos-open DovePower /usr/bin/doveos-settings-ui power</Program>
+</RootMenu>
+ <WindowStyle decorations="motif">
+  <Font>DejaVu Sans-8:bold</Font><Width>3</Width><Height>22</Height><Corner>0</Corner>
+  <Foreground>#c0c0c0</Foreground><Background>#808080</Background><Outline>#000000:#ffffff</Outline>
+  <Active><Foreground>#ffffff</Foreground><Background>#000080</Background><Outline>#000000:#ffffff</Outline></Active>
+ </WindowStyle>
+ <TrayStyle decorations="motif"><Font>DejaVu Sans-8:bold</Font><Foreground>#000000</Foreground><Background>#c0c0c0</Background><Outline>#ffffff</Outline></TrayStyle>
+ <TrayButtonStyle><Font>DejaVu Sans-8:bold</Font><Foreground>#000000</Foreground><Background>#c0c0c0</Background><Outline>#808080</Outline><Active><Foreground>#000000</Foreground><Background>#a8a8a8</Background></Active></TrayButtonStyle>
+ <TaskListStyle decorations="motif"><Font>Microsoft Sans Serif-8</Font><Foreground>#000000</Foreground><Background>#c0c0c0</Background><Outline>#000000:#ffffff</Outline><Active><Foreground>#000000</Foreground><Background>#c0c0c0:#ffffff</Background><Outline>#ffffff:#808080</Outline></Active></TaskListStyle>
+ <MenuStyle decorations="motif"><Font>Microsoft Sans Serif-8</Font><Foreground>#151515</Foreground><Background>#c0c0c0</Background><Active><Foreground>#ffffff</Foreground><Background>#000080</Background></Active></MenuStyle>
+ <Tray x="0" y="-1" height="30" autohide="off">
+  <TrayButton icon="dove-start.png" label="Start">root:1</TrayButton>
+  <Swallow name="doveos-separator1" width="14" height="24">/usr/bin/doveos-status doveos-separator1</Swallow>
+  <TaskList maxwidth="210"/>
+  <Dock width="18"/>
+  <Swallow name="doveos-status" width="174" height="24">/usr/bin/doveos-status</Swallow>
+ </Tray>
+ <Desktops width="1" height="1"><Background type="solid">#394f6b</Background></Desktops>
+ <FocusModel>click</FocusModel><SnapMode distance="10">border</SnapMode><MoveMode>opaque</MoveMode><ResizeMode>outline</ResizeMode>
+ <DoubleClickSpeed>450</DoubleClickSpeed><DoubleClickDelta>5</DoubleClickDelta>
+ <Key key="F4" mask="A">close</Key><Key key="Tab" mask="A">next</Key>
+ <Key key="Escape" mask="C">root:1</Key><Key key="Return" mask="A">exec:/tmp/doveos-theme/doveos-open xterm xterm</Key>
+ <Group><Name>xedit</Name><Option>width:700</Option><Option>height:450</Option></Group>
+ <Group><Name>pcmanfm</Name><Option>width:760</Option><Option>height:500</Option></Group>
+</JWM>

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=DoveDeX
+Comment=Connect a phone desktop to the Lap Dock
+Icon=/media/usb0/DoveOS-v2/AppIcons/dove-dex-v2.png
+Exec=/tmp/doveos-theme/doveos-open dovedex /bin/sh /media/usb0/DoveOS-v2/dovedex/launch.sh
+Terminal=false
+Categories=Network;Utility;

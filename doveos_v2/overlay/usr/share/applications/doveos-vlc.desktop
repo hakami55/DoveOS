@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=VLC Media Player
+Exec=/usr/bin/doveos-vlc %f
+Icon=/etc/doveos/vlc.png
+Terminal=false
+Categories=AudioVideo;Player;
+MimeType=video/mp4;video/x-matroska;video/webm;video/avi;video/msvideo;video/x-msvideo;video/mpeg;video/mp2t;video/quicktime;video/x-ms-wmv;video/x-flv;video/ogg;video/3gpp;video/3gpp2;video/x-ogm+ogg;video/x-theora+ogg;audio/mpeg;audio/mp4;audio/x-m4a;audio/aac;audio/x-aac;audio/flac;audio/x-flac;audio/ogg;audio/x-vorbis+ogg;audio/x-opus+ogg;audio/opus;audio/wav;audio/x-wav;audio/vnd.wave;audio/x-ms-wma;audio/x-aiff;audio/x-ape;audio/x-matroska;application/ogg;application/x-ogg;application/x-extension-mp4;

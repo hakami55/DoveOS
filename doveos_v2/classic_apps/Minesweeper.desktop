@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Minesweeper
+Comment=Classic mines, flags and best times
+Icon=/media/usb0/DoveOS-v2/ClassicApps/icons/mines-48.png
+Exec=/tmp/doveos-theme/doveos-open DoveMinesweeper /bin/sh /media/usb0/DoveOS-v2/ClassicApps/launch.sh minesweeper
+Categories=Game;LogicGame;
+Terminal=false

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Games
+Icon=applications-games
+Exec=/usr/bin/doveos-games
+Terminal=false

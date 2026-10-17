@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Local Transfer
+Comment=Send and receive files over your local network
+Icon=/media/usb0/DoveOS-v2/Transfer/transfer.png
+Exec=/bin/sh /media/usb0/DoveOS-v2/Transfer/launch.sh
+Terminal=false
+Categories=Network;FileTransfer;

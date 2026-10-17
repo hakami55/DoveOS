@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=DoveOS apps
+Icon=preferences-system
+Exec=/usr/bin/doveos-legacy
+Terminal=false

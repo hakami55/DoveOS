@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Settings
+Icon=preferences-system
+Exec=/usr/bin/doveos-settings-ui
+Terminal=false

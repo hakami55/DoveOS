@@ -1,0 +1,63 @@
+#!/bin/sh
+# VLC GUI with stock-dock PCM playback; no direct optional ALSA mapping.
+# /tmp is bound into the desktop without its nested mounts. Anchor the optional
+# root through the host's proc entry to preserve those mounts when entering it.
+OPTIONAL=/proc/1/root/tmp/doveos-optional-root
+chroot /proc/1/root /bin/sh /media/usb0/DoveOS-v2/optional-mount.sh >>/tmp/doveos-vlc.log 2>&1 || exit 2
+test -r "$OPTIONAL/usr/bin/vlc" || exit 2
+test -x /tmp/doveos-vlc-pcm-bridge || exit 2
+LOCK=/tmp/doveos-vlc-gui.lock
+if ! mkdir "$LOCK" 2>/dev/null;then
+ old=$(cat "$LOCK/pid" 2>/dev/null || :)
+ case "$old" in ''|*[!0-9]*) ;; *)
+  if kill -0 "$old" 2>/dev/null;then
+   if [ "$#" -gt 0 ] && [ -x /tmp/doveos-vlc-rc-client ];then
+    exec /tmp/doveos-vlc-rc-client "$1"
+   fi
+   exit 0
+  fi;;esac
+ rm -f "$LOCK/pid"
+ rmdir "$LOCK" 2>/dev/null || exit 2
+ mkdir "$LOCK" || exit 2
+fi
+echo $$ > "$LOCK/pid"
+FIFO=/tmp/doveos-vlc-audio.fifo
+rm -f "$FIFO"
+mkfifo "$FIFO"
+chown 65534:29 "$FIFO"
+chmod 600 "$FIFO"
+chroot /proc/1/root /tmp/doveos-vlc-pcm-bridge "$FIFO" >/tmp/doveos-vlc-pcm.log 2>&1 &
+audio=$!
+app=
+hardware=
+if [ -x /tmp/doveos-vlc-rtk-host ];then
+ rm -f /tmp/doveos-optional-runtime/rtk-vlc.sock
+ chroot /proc/1/root /bin/sh /media/usb0/DoveOS-v2/vlc-hardware-host.sh >/tmp/vlc-rtk-host.log 2>&1 &
+ hardware=$!
+ count=0
+ while [ ! -S /tmp/doveos-optional-runtime/rtk-vlc.sock ] && kill -0 "$hardware" 2>/dev/null && [ "$count" -lt 20 ];do
+  count=$((count+1));sleep .1
+ done
+ export VLC_PLUGIN_PATH=/tmp/doveos-vlc-plugins
+fi
+cleanup(){
+ trap - EXIT INT TERM
+ test -z "$app" || kill "$app" 2>/dev/null || :
+ kill "$audio" 2>/dev/null || :
+ wait "$audio" 2>/dev/null || :
+ test -z "$hardware" || kill "$hardware" 2>/dev/null || :
+ test -z "$hardware" || wait "$hardware" 2>/dev/null || :
+ rm -f /tmp/doveos-optional-runtime/vlc-control.sock /tmp/doveos-optional-runtime/rtk-vlc.sock
+ rm -f "$FIFO" "$LOCK/pid"
+ rmdir "$LOCK" 2>/dev/null || :
+}
+trap cleanup EXIT INT TERM
+/tmp/doveos-optional-chroot "$OPTIONAL" /usr/bin/vlc \
+ --no-one-instance --no-qt-privacy-ask --extraintf=oldrc --rc-fake-tty \
+ --rc-unix=/tmp/doveos-optional-runtime/vlc-control.sock --codec=dove_rtk,any --avcodec-threads=1 \
+ --avcodec-hw=none --no-avcodec-dr --vout=xcb_x11 --file-caching=1000 --no-audio-time-stretch \
+ --aout=afile --audiofile-file="$FIFO" --audiofile-format=s16 \
+ --audiofile-channels=2 --audiofile-wav "$@" >>/tmp/doveos-vlc.log 2>&1 &
+app=$!
+/usr/bin/doveos-launch-busy "$app" >/tmp/doveos-vlc-startup.log 2>&1
+wait "$app"

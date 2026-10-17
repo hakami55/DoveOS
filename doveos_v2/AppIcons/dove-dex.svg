@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g transform="translate(0 0) scale(1.7)" shape-rendering="crispEdges"><g xmlns="http://www.w3.org/2000/svg" transform="translate(1 1)">
+<path fill="#071638" d="M3 1h3v1h2v1h2v1h2v1h2v2h1v2h1v1h2V9h1V7h3v1h1v2h1v2h-2v1h-1v2h-1v1h-1v1h-2v1h-2v1h-1v1h-2v1h-2v1H8v1H6v-1H5v-1H4v-1H3v-2h4v-1H6v-1H5v-1H4v-1H3v-1H2v-1H1v-2h5V10H4V9H3V6H2V3h1z" />
+<path fill="#2789f5" d="M4 3h2v1h2v1h2v1h2v2h1v2h2v2h1v2h-2v2h-2v1H9v-1H7v-1H5v-1H4v-1H3v-1h4v-1H6V9H4z" />
+<path fill="#9bd7ff" d="M5 2h1v2h2v1h2v1h2v2h1v2h2v2h1v2h-2v-1h-1v-2h-2V9H9V7H7V5H5z" />
+<path fill="#ffffff" d="M6 4h1v1h2v1h2v2h1v2h2v2h1v2h1v-3h2v-1h2V8h2v2h1v1h-2v1h-1v1h-1v2h-2v1h-2v1h-2v1H9v1H5v1h2v1h2v-1h3v-1h2v-1h2v-1h2v-1h1v-2h1v-2h-2v2h-3v1h-3v-1h-2v-2H8V9H6z" />
+<path fill="#56b2fc" d="M3 12h4v1h2v1h3v2h2v1h-4v-1H8v-1H6v-1H4v-1H3zM6 19h4v-1h3v-1h3v-1h3v-2h1v1h-1v2h-2v1h-2v1h-3v1h-2v1H7v-1H6z" />
+<path fill="#075acb" d="M5 20h2v1h3v-1h3v-1h1v1h-2v1h-2v1H7v-1H5z" />
+
+<path fill="#071638" d="M19 7h3v1h1v1h1v3h-2v1h-2v2h-2v-3h-1V9h1V8h1z" />
+<path fill="#ffffff" d="M19 9h1V8h2v2h1v1h-1v1h-2v2h-2v-2h1z" />
+<rect x="22" y="10" width="1" height="1" fill="#b8e5ff" />
+<path fill="#b8e5ff" d="M19 11h1v2h-1v1h-1v-1h1z" />
+</g></g><rect x="27" y="29" width="20" height="15" rx="2" fill="#071638"/><rect x="29" y="31" width="16" height="11" rx="1" fill="#e4f5ff"/><path d="M35 43h4v2h5v2H30v-2h5z" fill="#071638"/><text x="37" y="39.6" text-anchor="middle" font-family="DejaVu Sans" font-weight="bold" font-size="7" fill="#075acb">DeX</text></svg>

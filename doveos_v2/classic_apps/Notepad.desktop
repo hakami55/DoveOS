@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Notepad
+Comment=DoveOS plain-text editor
+Icon=/media/usb0/DoveOS-v2/ClassicApps/icons/notepad-48.png
+Exec=/bin/sh /media/usb0/DoveOS-v2/ClassicApps/launch.sh notepad %f
+Categories=Utility;TextEditor;
+MimeType=text/plain;
+Terminal=false

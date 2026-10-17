@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=DoveBrowser (Preview)
+Comment=Modern web browsing with a classic DoveOS interface
+Icon=/media/usb0/DoveOS-v2/ClassicApps/icons/browser-24.png
+Exec=/bin/sh /media/usb0/DoveOS-v2/ModernBrowser/launch.sh
+Terminal=false
+Categories=Network;WebBrowser;

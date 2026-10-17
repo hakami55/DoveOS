@@ -1,0 +1,3 @@
+#!/bin/sh
+echo games > /tmp/doveos-v2-action
+jwm -exit

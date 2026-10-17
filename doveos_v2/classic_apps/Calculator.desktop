@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Calculator
+Comment=Classic standard calculator
+Icon=/media/usb0/DoveOS-v2/ClassicApps/icons/calculator-48.png
+Exec=/tmp/doveos-theme/doveos-open DoveCalculator /bin/sh /media/usb0/DoveOS-v2/ClassicApps/launch.sh calculator
+Categories=Utility;Calculator;
+Terminal=false

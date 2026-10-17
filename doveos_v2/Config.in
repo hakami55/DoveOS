@@ -1,0 +1,1 @@
+source "$BR2_EXTERNAL_DOVEOS_PATH/package/doveos-desktop/Config.in"

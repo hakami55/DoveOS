@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=HDMI In
+Icon=video-display
+Exec=/usr/bin/doveos-hdmi
+Terminal=false

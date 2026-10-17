@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Media
+Icon=multimedia-video-player
+Exec=pcmanfm /media/usb0/DrMoSa/Media
+Terminal=false

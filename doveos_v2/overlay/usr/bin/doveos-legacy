@@ -1,0 +1,3 @@
+#!/bin/sh
+echo legacy > /tmp/doveos-v2-action
+jwm -exit

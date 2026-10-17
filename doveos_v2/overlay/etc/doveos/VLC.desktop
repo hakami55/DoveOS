@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=VLC Media Player (trial)
+Exec=/usr/bin/doveos-vlc
+Icon=/etc/doveos/vlc.png
+StartupNotify=false
+Terminal=false
+Categories=AudioVideo;Player;

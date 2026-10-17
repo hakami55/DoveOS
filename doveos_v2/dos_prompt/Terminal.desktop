@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Terminal
+Comment=DoveOS Linux shell with classic DOS VGA console text
+Icon=/etc/doveos/classic-icons/48/utilities-terminal.png
+Exec=/bin/sh /media/usb0/DoveOS-v2/Terminal/launch.sh
+Terminal=false
+Categories=System;TerminalEmulator;

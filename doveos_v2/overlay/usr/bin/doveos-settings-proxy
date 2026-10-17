@@ -1,0 +1,11 @@
+#!/bin/sh
+# Run the established dock settings helper from the v2 desktop namespace.
+case "${1:-}" in
+ startup-sound-save|startup-sound-preview|startup-sound-boot|system-sound-preview|system-sound-event)
+  exec chroot /proc/1/root /bin/sh /tmp/doveos-theme/system-sounds.sh "$@"
+  ;;
+ sound-test|sound-test-left|sound-test-right|sound-test-stop|sound-headphones|sound-record|sound-play-recording)
+  exec chroot /proc/1/root /bin/sh /tmp/doveos-theme/sound-test.sh "$@"
+  ;;
+esac
+exec chroot /proc/1/root /bin/sh /tmp/drmosa-usb-menu-runtime/settings.sh "$@"

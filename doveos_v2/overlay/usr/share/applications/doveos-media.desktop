@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=DoveOS Media
+Icon=multimedia-video-player
+Exec=/usr/bin/doveos-media %f
+Terminal=false
+MimeType=video/mp4;audio/x-wav;

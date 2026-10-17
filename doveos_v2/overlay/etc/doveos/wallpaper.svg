@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+ <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#286b88"/><stop offset="1" stop-color="#80bfc0"/></linearGradient><linearGradient id="lake" x2="0" y2="1"><stop stop-color="#58a5b2"/><stop offset="1" stop-color="#174860"/></linearGradient></defs>
+ <path fill="url(#sky)" d="M0 0h1280v720H0z"/>
+ <path fill="#73a6b1" d="M0 470 150 340 240 410 420 245 595 425 780 326 920 406 1120 270 1280 385v335H0z"/>
+ <path fill="#376f83" d="M0 530 180 435 300 495 470 420 610 520 890 403 1050 460 1280 408v312H0z"/>
+ <path fill="url(#lake)" d="M0 550q240-60 485 0t795-10v180H0z"/>
+ <path fill="#1d5261" d="M0 566q260-18 400 40L200 652 0 646zM1280 572q-270-30-390 72l390 55z"/>
+ <path stroke="#a8d7d7" opacity=".3" stroke-width="2" d="M390 615h335m-410 22h575m-555 29h485m-720 27h390"/>
+ <g fill="#f2fbff" font-family="DejaVu Sans,sans-serif"><text x="815" y="110" font-size="56">DoveOS</text><text x="818" y="144" font-size="20">A small desktop. Yours to explore.</text></g>
+</svg>

@@ -1,0 +1,39 @@
+#!/bin/sh
+export HOME=/root DISPLAY=:7 LANG=C
+export TZ=AST-3
+[ ! -f /media/usb0/DoveOS-v2/home/time-zone.txt ] || TZ=$(cat /media/usb0/DoveOS-v2/home/time-zone.txt)
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+export LD_LIBRARY_PATH=/usr/lib/arm-linux-gnueabihf:/lib/arm-linux-gnueabihf
+export XDG_CONFIG_HOME=/root/.config XDG_CACHE_HOME=/root/.cache
+export XDG_RUNTIME_DIR=/tmp/doveos-v2-runtime
+export GTK_MODULES=/tmp/doveos-theme/system-sounds-gtk.so${GTK_MODULES:+:$GTK_MODULES}
+export GTK_PATH=/tmp/doveos-theme/gtk-modules
+mkdir -p "$XDG_RUNTIME_DIR" /root/.cache /root/.config/pcmanfm/DoveOS /root/.config/libfm /root/Desktop /root/Documents /root/Templates
+cp /etc/doveos/mimeapps.list /root/.config/mimeapps.list
+cp /etc/doveos/libfm.conf /root/.config/libfm/libfm.conf
+chmod 700 "$XDG_RUNTIME_DIR"
+cp /etc/doveos/jwmrc /root/.jwmrc
+cp /etc/doveos/gtkrc /root/.gtkrc-2.0
+cp /etc/doveos/desktop-items-0.conf /root/.config/pcmanfm/DoveOS/desktop-items-0.conf
+cp /etc/doveos/user-dirs.dirs /root/.config/user-dirs.dirs
+cp /etc/doveos/*.desktop /root/Desktop/
+rm -f /root/Desktop/DoveOS-apps.desktop
+chmod 755 /root/Desktop/*.desktop
+[ -f /root/Documents/notes.txt ] || cp /etc/doveos/welcome.txt /root/Documents/notes.txt
+export GDK_PIXBUF_MODULEDIR=/usr/lib/arm-linux-gnueabihf/gdk-pixbuf-2.0/2.10.0/loaders
+export GDK_PIXBUF_MODULE_FILE=/tmp/doveos-v2-pixbuf.cache
+/usr/lib/arm-linux-gnueabihf/gdk-pixbuf-2.0/gdk-pixbuf-query-loaders > "$GDK_PIXBUF_MODULE_FILE" 2>/tmp/doveos-v2-pixbuf.log
+mkdir -p /tmp/.X11-unix
+if [ -f /tmp/doveos-theme/keyboard-apply.sh ];then
+ /bin/sh /tmp/doveos-theme/keyboard-apply.sh > /tmp/doveos-keyboard-apply.log 2>&1 || setxkbmap -layout us -model pc105
+else
+ setxkbmap -layout us -model pc105
+fi
+xsetroot -cursor_name left_ptr
+pcmanfm --desktop --profile=DoveOS > /tmp/doveos-v2-files.log 2>&1 &
+files=$!
+/bin/sh /usr/bin/doveos-settings-proxy startup-sound-boot > /tmp/doveos-startup-sound.log 2>&1 &
+jwm > /tmp/doveos-v2-jwm.log 2>&1
+kill "$files" 2>/dev/null
+kill -9 "$files" 2>/dev/null || :
+wait "$files" 2>/dev/null || :

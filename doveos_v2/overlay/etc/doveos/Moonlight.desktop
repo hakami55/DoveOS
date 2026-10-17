@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Moonlight
+Comment=Stream your PC to the Lap Dock
+Icon=moonlight
+Exec=/usr/bin/doveos-moonlight
+Terminal=false

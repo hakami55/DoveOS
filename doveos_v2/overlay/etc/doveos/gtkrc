@@ -1,0 +1,34 @@
+gtk-font-name="MS Sans Serif 8"
+gtk-icon-theme-name="DoveClassic"
+gtk-theme-name="Raleigh"
+include "/tmp/doveos-theme/gtk-2.0/gtkrc"
+
+gtk-cursor-theme-name = "DoveClassicCursor"
+gtk-cursor-theme-size = 32
+
+# DoveOS classic message boxes. Native GTK responses and keyboard focus remain.
+pixmap_path "/tmp/doveos-theme/gtk-2.0:/tmp/doveos-theme/classic-icons/32"
+gtk-button-images = 0
+style "dove-dove-message-box" {
+ GtkDialog::content-area-border = 4
+ GtkDialog::action-area-border = 6
+ GtkDialog::button-spacing = 6
+ GtkMessageDialog::message-border = 12
+}
+class "GtkMessageDialog" style "dove-dove-message-box"
+style "dove-dove-message-icons" {
+ stock["gtk-dialog-error"] = { { "dove-dialog-error.png", *, *, "gtk-dialog" } }
+ stock["gtk-dialog-warning"] = { { "dove-dialog-warning.png", *, *, "gtk-dialog" } }
+ stock["gtk-dialog-info"] = { { "dove-dialog-information.png", *, *, "gtk-dialog" } }
+ stock["gtk-dialog-question"] = { { "dove-dialog-question.png", *, *, "gtk-dialog" } }
+}
+class "GtkWidget" style "dove-dove-message-icons"
+
+# Classic message response rows: 75 x 23 buttons and six-pixel gaps.
+style "dove-dove-message-buttons" {
+ GtkButtonBox::child-min-width = 75
+ GtkButtonBox::child-min-height = 23
+ GtkButtonBox::child-internal-pad-x = 0
+ GtkButtonBox::child-internal-pad-y = 0
+}
+widget_class "*GtkMessageDialog.*GtkHButtonBox" style "dove-dove-message-buttons"

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Wireless DeX
+Comment=Connect Samsung Wireless DeX directly to the Lap Dock
+Icon=video-display
+Exec=/usr/bin/doveos-dex
+Terminal=false

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Files
+Comment=Browse files with DoveOS Explorer
+Icon=/etc/doveos/classic-icons/48/folder.png
+Exec=/bin/sh /media/usb0/DoveOS-v2/Explorer/launch.sh /media/usb0/DrMoSa/Documents
+Terminal=false
+Categories=System;FileManager;

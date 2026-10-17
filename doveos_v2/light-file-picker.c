@@ -1,0 +1,2 @@
+#include "doveos.h"
+int main(int argc,char **argv){gtk_init(&argc,&argv);GtkWidget *d=dove_openfiledialog(NULL,"Open PDF");GtkFileFilter *f=gtk_file_filter_new();gtk_file_filter_set_name(f,"PDF documents");gtk_file_filter_add_pattern(f,"*.pdf");gtk_file_filter_add_pattern(f,"*.PDF");gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(d),f);int result=1;if(gtk_dialog_run(GTK_DIALOG(d))==GTK_RESPONSE_ACCEPT){char *path=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(d));g_print("%s\n",path);g_free(path);result=0;}gtk_widget_destroy(d);return result;}

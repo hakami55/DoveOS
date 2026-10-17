@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=DovePlayer
+Comment=Local video and audio player — preview
+Exec=/bin/sh /media/usb0/DoveOS-v2/DovePlayer/launch.sh %f
+Icon=/media/usb0/DoveOS-v2/DovePlayer/icon.png
+Terminal=false
+Categories=AudioVideo;Player;
+MimeType=video/mp4;audio/mp4;audio/mpeg;audio/wav;audio/flac;

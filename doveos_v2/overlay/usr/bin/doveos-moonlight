@@ -1,0 +1,10 @@
+#!/bin/sh
+export HOME=/root DISPLAY=:7
+export LD_LIBRARY_PATH=/usr/lib/arm-linux-gnueabihf:/lib/arm-linux-gnueabihf
+/usr/bin/doveos-control-x /media/usb0 0 --moonlight
+code=$?
+if [ "$code" -eq 10 ];then
+ echo moonlight > /tmp/doveos-v2-action
+ jwm -exit
+fi
+exit 0
