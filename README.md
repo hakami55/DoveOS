@@ -4,8 +4,9 @@ A compact desktop and streaming environment for the **HP Elite x3 Lap Dock**.
 DoveOS runs from a USB drive using the dock's existing firmware. It provides a
 720p desktop, settings, files, local media playback and receiver applications.
 
-**Release status: preparing the USB release candidate.** The cleaned image
-must pass a fresh-drive boot check before a final release is published.
+**Release status: USB release candidate.** Fresh-drive boot, the startup logo
+and the 720p GPU desktop have passed physical acceptance. Application checks
+are being completed before the final release.
 
 [Install and boot](docs/INSTALL.md) · [Hardware compatibility](docs/COMPATIBILITY.md) ·
 [Applications](docs/APPS.md) · [Source and build](docs/BUILD.md) · [Downloads](https://github.com/hakami55/DoveOS/releases)

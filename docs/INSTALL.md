@@ -18,7 +18,7 @@
 6. Wait for completion and verification, then safely eject the USB.
 
 You need only one writer. Do not copy the `.img` into an ordinary USB folder.
-The release will identify which writer was actually used for acceptance.
+Acceptance used a raw image write with full readback verification.
 
 ## Boot the Lap Dock
 
@@ -44,5 +44,11 @@ in the dock; the USB image alone does not install that internal hook.
 
 Check power, USB placement and image verification. Disconnect left-port sources.
 Try a healthy USB drive written again from the verified image. Preserve your
-working USB before testing a new release. Recovery and final image acceptance
-are still being checked; do not overwrite your only working installation.
+working USB until the new installation boots and your required apps are checked.
+Do not overwrite your only working installation.
+
+## Check the active display
+
+Open Control Panel → Display. `GPU accelerated RGB desktop (Mali GLES2, 720p)`
+confirms GPU desktop mode at 1280 × 720. A CPU status or the CPU Mode watermark
+indicates fallback. Individual applications use their own rendering paths.

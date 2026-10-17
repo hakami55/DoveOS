@@ -2,7 +2,7 @@
 
 | Application | What it does | Status |
 | --- | --- | --- |
-| Desktop and Files | Launch apps and manage USB documents. | Working; fresh-image boot acceptance pending. |
+| Desktop and Files | Launch apps and manage USB documents. | Working; fresh USB boot and 720p GPU desktop confirmed. |
 | Control Panel | Network, sound tests, display, power and preferences. | Working within the hardware compatibility table. |
 | Moonlight | Stream a paired PC with controls and sound. | Working; H.264 and supported HEVC hosts. |
 | DoveDeX | Stream a supported Android desktop or screen with controls and sound. | Working over USB and Wi-Fi; device capabilities and authorization apply. |
