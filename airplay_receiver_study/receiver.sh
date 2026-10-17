@@ -92,7 +92,7 @@ case "$duration" in ''|*[!0-9]*) exit 2;;esac
 DOVE_AIRPLAY_CLAIM=1 "$R/lib/ld-linux-armhf.so.3" --library-path "$R/lib:/usr/lib:/lib" "$bridge_program" "$duration" > /tmp/doveos-airplay-video.log 2>&1 &
 bridge=$!
 "$R/lib/ld-linux-armhf.so.3" --library-path "$R/lib:/usr/lib:/lib" "$uxplay_program" \
- -n 'DoveOS AirPlay (Preview)' -nh -s '1280x720@30' -fps 30 \
+ -n 'DoveAir' -nh -s '1280x720@30' -fps 30 \
  -as "$audio" -vrtp 'pt=96 ! udpsink host=127.0.0.1 port=17004' -p 17100 \
  > /tmp/doveos-airplay-receiver.log 2>&1 &
 receiver=$!
@@ -119,7 +119,7 @@ if [ "$ready" != 1 ];then
  tail -15 /tmp/doveos-airplay-receiver.log
  exit 5
 fi
-echo 'Listening as DoveOS AirPlay (Preview). Use Screen Mirroring on the same network.'
+echo 'Listening as DoveAir. Use Screen Mirroring on the same network.'
 echo 'Ctrl+Alt+Shift+Q returns to DoveOS. Preview stops after 30 minutes.'
 previous_geometry=
 while [ ! -e "$STOP" ] && kill -0 "$receiver" 2>/dev/null && kill -0 "$bridge" 2>/dev/null;do

@@ -3,7 +3,7 @@
 ## Requirements
 
 - HP Elite x3 Lap Dock with compatible existing firmware.
-- A healthy spare USB drive. The minimum capacity will be stated beside the image.
+- A healthy spare USB drive of at least **4 GB**. The disk image is 2 GiB.
 - A computer with a USB image writer and the downloaded DoveOS `.img` file.
 - Power for the Lap Dock. Use a supported local network for wireless features.
 

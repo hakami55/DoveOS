@@ -290,8 +290,8 @@ int main(int argc, char **argv) {
     dove_tab_add(pages, scroll_page(quality), "Quality");
     GtkWidget *help = dove_panel(FALSE, 10); gtk_container_set_border_width(GTK_CONTAINER(help), 12);
     dove_add(help, dove_label("If your phone does not appear\nUse a USB data cable, unlock the phone and approve USB debugging. Wi-Fi currently requires an already enabled legacy ADB address:port. Modern wireless-debugging pairing is not available yet."));
-    dove_add(help, dove_label("If Wi-Fi feels slow\nUse 5 GHz and compare network delay. The Dove Wi-Fi Low Latency phone companion was tested without root on Android device: keep it visible on the phone with its screen on. A request is not a guarantee on every phone."));
-    dove_add(help, dove_label("Desktop support\nAndroid device native DeX has a firmware-specific activation procedure. Android device Android 15 supports a secondary desktop and freeform windows. New Samsung and other OEM modes still need device-specific testing."));
+    dove_add(help, dove_label("If Wi-Fi feels slow\nUse 5 GHz and compare network delay. If using a Wi-Fi low-latency companion, keep it visible on the phone with its screen on. Support depends on the Android device."));
+    dove_add(help, dove_label("Desktop support\nNative desktop modes depend on phone firmware. Secondary desktop and freeform-window support depend on the Android version and manufacturer. Compatibility varies; screen mirroring is available where supported."));
     dove_add(help, dove_label("Leave a session\nCtrl + Alt + Shift + Q returns to DoveOS; Alt + Q also closes the viewer. The phone desktop uses the full screen while the DoveOS desktop stays running in the background."));
     dove_tab_add(pages, scroll_page(help), "Help");
     status = dove_label(""); dove_add(box, status);

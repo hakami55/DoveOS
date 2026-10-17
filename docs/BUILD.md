@@ -14,6 +14,12 @@ The current scripts document the original Linux/WSL build environment. Some
 paths still refer to that environment and require adjustment. Source upload
 does not establish an independently reproducible complete USB build yet.
 
+`sh tools/build-frontends.sh OUTPUT_DIRECTORY` builds the core frontends using
+the configured ARMHF compiler, GTK2 sysroot and desktop runtime. Override
+`DOVEOS_CC`, `DOVEOS_SDK_SYSROOT` and `DOVEOS_RUNTIME` for your environment.
+`tools/build-usb-image.sh` assembles an already prepared USB tree into a new
+image file; it does not format a physical drive.
+
 The base environment is built with Buildroot. The GUI uses the recorded ARMHF
 runtime packages. See `doveos_v2/build.sh`, `fetch_desktop.py`,
 `sdk/build-app.sh` and each application build script.

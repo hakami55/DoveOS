@@ -27,3 +27,5 @@ known_hosts
 id_*
 *.pem
 *.key
+/doveos_v2/startup-sounds/clips/
+/doveos_v2/startup-sounds/clips-manifest.json

@@ -58,14 +58,14 @@ static gboolean close_window(GtkWidget *widget,GdkEvent *event,gpointer unused){
 }
 int main(int argc,char **argv){
  gtk_init(&argc,&argv);output=g_string_new("");
- GtkWidget *window=dove_form("DoveOS AirPlay Preview",530,410);
+ GtkWidget *window=dove_form("DoveOS DoveAir",530,410);
  GtkWidget *box=gtk_vbox_new(FALSE,6);gtk_container_set_border_width(GTK_CONTAINER(box),12);
  gtk_container_add(GTK_CONTAINER(window),box);
  dove_add(box,dove_label("AirPlay screen mirroring"));
  dove_add(box,dove_label("1. Connect DoveOS and your iPhone/iPad to the same reachable network.\n"
  "2. Click Start receiver and wait for Listening.\n"
  "3. On the phone, open Control Center > Screen Mirroring.\n"
- "4. Choose DoveOS AirPlay (Preview).\n"
+ "4. Choose DoveAir.\n"
  "Rotation briefly restarts the picture; sound stays connected.\n\n"
  "Ctrl+Alt+Shift+Q returns to DoveOS. The receiver stops after 30 minutes."));
  audio=dove_checkbox("Forward sound to Lap Dock speakers",TRUE);dove_add(box,audio);

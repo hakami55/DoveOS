@@ -119,7 +119,9 @@ int main(int argc,char **argv){
     char mac[64]={0};FILE *f=fopen("/sys/class/net/wlan0/address","r");
     if(!f)return 15;
     char *read=fgets(mac,sizeof mac,f);fclose(f);
-    if(!read||strncmp(mac,"02:00:00:00:00:01",17))return 15;
+    /* Public runtime: nl80211 power-save is a standard per-interface API.
+       Require an available interface instead of one owner's hardware address. */
+    if(!read||strlen(mac)<17||!if_nametoindex("wlan0"))return 15;
 #endif
     signal(SIGINT,stop);signal(SIGTERM,stop);signal(SIGHUP,stop);
     int original=0,changed=0,result=1;
