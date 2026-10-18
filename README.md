@@ -4,13 +4,23 @@ A USB desktop and streaming environment for the **HP Elite x3 Lap Dock**.
 DoveOS uses the dock's built-in processor, display, keyboard, touchpad and
 existing Linux kernel to provide a 720p desktop and streaming applications.
 
+![DoveOS desktop and receiver overview](docs/images/01-doveos-overview.png)
+
 **Public release candidate:** manual image download, USB writing and boot have
 been completed successfully on the tested dock. Other board and firmware
 revisions remain unverified. See compatibility before preparing a drive.
 
 [Download the USB image](https://github.com/hakami55/DoveOS/releases/tag/v2.0.0-rc.1) | [Install and boot](docs/INSTALL.md) | [Hardware compatibility](docs/COMPATIBILITY.md) | [Applications](docs/APPS.md) | [Source and build](docs/BUILD.md)
 
+## Desktop preview
+
+Actual 720p DoveOS desktop on the Lap Dock:
+
+![DoveOS desktop screenshot](docs/images/04-doveos-desktop-screenshot.png)
+
 ## Get started
+
+![DoveOS USB boot and return to HP mode](docs/images/03-doveos-usb-boot.png)
 
 1. Download the image ZIP, `SHA256SUMS` and installation guide from Releases.
 2. Extract the ZIP and write its IMG to a spare USB of **32 GB or larger** with Rufus or balenaEtcher. Only one image writer is needed. Writing erases the selected USB.
@@ -20,6 +30,12 @@ revisions remain unverified. See compatibility before preparing a drive.
 Keep the working USB until the new copy boots and your required apps are checked.
 Compatible existing HP firmware and boot setup are required. The optional startup
 logo needs its matching internal splash hook. See the installation guide.
+
+## Connection options
+
+![Moonlight, DoveAir and DoveDeX connection options](docs/images/02-doveos-connections.png)
+
+For pairing and connection steps, see [Applications](docs/APPS.md).
 
 ## Included
 
