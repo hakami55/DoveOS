@@ -1,54 +1,49 @@
-# Install and boot
+# Install and boot DoveOS
 
 ## Requirements
 
 - HP Elite x3 Lap Dock with compatible existing firmware.
-- A healthy spare USB drive of at least **4 GB**. The disk image is 2 GiB.
-- A computer with a USB image writer and the downloaded DoveOS `.img` file.
-- Power for the Lap Dock. Use a supported local network for wireless features.
+- A healthy spare USB drive of **32 GB or larger**. The extracted disk image is approximately 16 GiB (17,180,917,760 bytes).
+- A computer with an image writer and enough free space to extract the download.
+- Power for the Lap Dock and a supported local network for wireless features.
 
 ## Prepare the USB
 
-1. Download the image and `SHA256SUMS` from the same GitHub release.
-2. Extract the compressed download to obtain the `.img` file.
-3. Compare its SHA-256 with the published checksum before writing.
-4. Open [Rufus](https://rufus.ie/) or [balenaEtcher](https://etcher.balena.io/).
-5. Select the DoveOS `.img` and the correct spare USB drive. Start writing.
-   Use raw/DD writing if the writer asks. **All data on that USB is erased.**
-6. Wait for completion and verification, then safely eject the USB.
+1. Download `DoveOS-current-fresh-20261018.img.zip`, `SHA256SUMS` and this guide from the same release.
+2. Verify the ZIP's SHA-256 against `SHA256SUMS`.
+3. Extract the ZIP to obtain `DoveOS-current-fresh-20261018.img`. Its SHA-256 is also listed in `SHA256SUMS`.
+4. Open [Rufus](https://rufus.ie/) or [balenaEtcher](https://www.balena.io/etcher). You need only one image writer.
+5. Select the extracted `.img` file and the correct spare USB. Use raw/DD mode if asked. **Writing erases all data on that USB.**
+6. Wait for writing and verification to finish, then safely eject the USB.
 
-You need only one writer. Do not copy the `.img` into an ordinary USB folder.
-Acceptance used a raw image write with full readback verification.
+Do not copy the image file into an ordinary USB folder. Keep your working DoveOS drive until the new one boots and your required apps are checked.
 
 ## Boot the Lap Dock
 
-1. Keep the left USB-C port empty.
+1. Leave the left USB-C port empty.
 2. Connect the prepared USB to a right USB-C port, directly or through a compatible hub.
-3. Connect power and start the Lap Dock. Wait for the DoveOS desktop.
-4. Open Control Panel to set up your network, sound and preferences.
-5. Pair your own streaming sources inside the relevant application.
+3. Connect power and start the dock. Wait for the desktop.
+4. Open Settings (Control Panel) to configure your network, sound and preferences.
+5. Pair your own streaming sources in the relevant app.
 
-The dock's existing firmware launches the USB environment. There is no PC-style
-BIOS boot menu or firmware replacement step in this installation.
-The optional startup logo requires the matching splash hook already installed
-in the dock; the USB image alone does not install that internal hook.
+This image is for the supported Lap Dock, not a PC. The dock's existing firmware launches the USB environment; there is no PC-style BIOS installation or firmware replacement step. The optional startup logo requires the matching splash hook already installed in the dock. The USB image alone does not install that internal hook.
+
+## Included apps
+
+Files, Terminal, Settings, Moonlight, DoveDeX, DoveAir, DoveCast, DovePlayer, Local Transfer, HDMI In and Controller Tester are included. DoveCast currently supports YouTube only. HDMI In requires a supported external USB capture card.
 
 ## Everyday use
 
-- Keep the boot USB attached. Save documents before restarting or ejecting.
-- `Ctrl+Alt+Shift+Q` exits supported full-screen streaming sessions.
-- Use a supported 5 GHz network for wireless streaming when available.
-- A connected headphone jack automatically routes audio to the headphones.
+- Keep the system USB connected. Save work before restarting or safely unmounting it.
+- `Ctrl+Alt+Shift+Q` returns from supported fullscreen streaming sessions.
+- Prefer a supported 5 GHz network for wireless streaming.
+- The 3.5 mm jack automatically routes sound to connected headphones.
+- Settings > System shows the active renderer, desktop resolution, memory, storage and network addresses.
 
-## If startup fails
+## Status and troubleshooting
 
-Check power, USB placement and image verification. Disconnect left-port sources.
-Try a healthy USB drive written again from the verified image. Preserve your
-working USB until the new installation boots and your required apps are checked.
-Do not overwrite your only working installation.
+This is a release candidate. The updated UI passed checks on the original dock, and the new USB passed its file scan. A physical boot check of this updated spare remains pending.
 
-## Check the active display
+If startup fails, check power, leave the left port empty, verify the image and try a healthy USB written again from the verified image. Preserve the working installation.
 
-Open Control Panel → Display. `GPU accelerated RGB desktop (Mali GLES2, 720p)`
-confirms GPU desktop mode at 1280 × 720. A CPU status or the CPU Mode watermark
-indicates fallback. Individual applications use their own rendering paths.
+See [hardware compatibility](https://github.com/hakami55/DoveOS/blob/main/docs/COMPATIBILITY.md) and [application support](https://github.com/hakami55/DoveOS/blob/main/docs/APPS.md) for scope and limits. Internal USB 3.0 support and using the left port as an ordinary USB host remain unresolved.
