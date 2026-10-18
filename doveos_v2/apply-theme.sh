@@ -22,6 +22,9 @@ boot_trace theme_extract_end
 if [ -r "$B/Memory/static-runtime.sh" ];then
  /bin/sh "$B/Memory/static-runtime.sh" stage theme || echo THEME_STATIC_RAM_FALLBACK
 fi
+if [ -r "$B/UIRefresh/install.sh" ];then
+ /bin/sh "$B/UIRefresh/install.sh" theme || echo UI_REFRESH_FALLBACK
+fi
 if [ -r "$B/Cursors/install-theme.sh" ];then
  /bin/sh "$B/Cursors/install-theme.sh"
 fi
@@ -30,16 +33,19 @@ test -f "$T/doveos-status"
 mkdir -p "$T/live-etc" "$B/home/.icons/DoveClassic"
 mkdir -p "$B/home/.local/share/fonts"
 boot_trace theme_fonts_begin
-cp "$T/fonts/dove-ui.ttf" "$T/fonts/dove-sans.ttf" "$T/fonts/dove-sans-bold.ttf" "$B/home/.local/share/fonts/"
+cp "$T/fonts/sserife.fon" "$T/fonts/micross.ttf" "$T/fonts/tahomabd.ttf" "$B/home/.local/share/fonts/"
 boot_trace theme_fonts_end
 # Fonts are installed on USB; keeping their installation copies in tmpfs
 # adds 1.7 MiB to every desktop session without helping font rendering.
-for name in dove-ui.ttf dove-sans.ttf dove-sans-bold.ttf;do
+for name in sserife.fon micross.ttf tahomabd.ttf;do
  if cmp -s "$T/fonts/$name" "$B/home/.local/share/fonts/$name";then rm -f "$T/fonts/$name";fi
 done
 cp -a "$M/etc/doveos/." "$T/live-etc/"
 cp "$T/jwmrc" "$T/gtkrc" "$T/dove-start.png" "$T/start-sidebar.png" "$T/desktop-items-0.conf" "$T/live-etc/"
 cp -a "$T/classic-icons" "$T/live-etc/"
+if [ -r "$B/UIRefresh/install.sh" ];then
+ /bin/sh "$B/UIRefresh/install.sh" menu || echo UI_REFRESH_MENU_FALLBACK
+fi
 boot_trace theme_usb_icons_begin
 # Refresh the persistent icon cache only when the source theme changes.
 icon_signature=$(sha256sum "$B/classic-theme.tar.gz")

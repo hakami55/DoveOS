@@ -248,7 +248,10 @@ static void poll_action(void) {
     (void)status;
 }
 static GtkWidget *label(const char *text) {return dove_label(text);}
-static void add(GtkWidget *box,GtkWidget *widget) {dove_add(box,widget);}
+static void add(GtkWidget *box,GtkWidget *widget) {gtk_box_pack_start(GTK_BOX(box),widget,FALSE,TRUE,4);}
+#include "settings_system.h"
+static const int settings_legacy_pages[10]={0,1,2,3,4,5,9,6,7,8};
+static GtkWidget *settings_group(GtkWidget *parent,const char *name){GtkWidget *frame=gtk_frame_new(name),*inner=gtk_vbox_new(FALSE,4);gtk_container_set_border_width(GTK_CONTAINER(inner),8);gtk_container_add(GTK_CONTAINER(frame),inner);add(parent,frame);return inner;}
 static GtkWidget *page(const char *name) {
  GtkWidget *box=dove_panel(FALSE,5);gtk_container_set_border_width(GTK_CONTAINER(box),12);
  GtkWidget *scrolled=dove_scroll(box);
@@ -464,17 +467,24 @@ static void apply_clock(GtkWidget *w,gpointer data){
 static GdkFilterReturn settings_page_event(GdkXEvent *raw,GdkEvent *event,gpointer data){
  (void)event;(void)data;XEvent *e=raw;
  if(e->type==ClientMessage&&e->xclient.message_type==XInternAtom(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),"_DOVEOS_SETTINGS_PAGE",False)){
-  long p=e->xclient.data.l[0];if(p>=0&&p<gtk_notebook_get_n_pages(GTK_NOTEBOOK(book)))gtk_notebook_set_current_page(GTK_NOTEBOOK(book),(int)p);gtk_window_present(GTK_WINDOW(window));return GDK_FILTER_REMOVE;
+  long p=e->xclient.data.l[0];if(p>=0&&p<gtk_notebook_get_n_pages(GTK_NOTEBOOK(book)))gtk_notebook_set_current_page(GTK_NOTEBOOK(book),settings_legacy_pages[p]);gtk_window_present(GTK_WINDOW(window));return GDK_FILTER_REMOVE;
  }return GDK_FILTER_CONTINUE;
 }
-static gboolean key_press(GtkWidget *w,GdkEventKey *event,gpointer data){(void)w;(void)data;if(event->keyval==GDK_Escape&&gtk_notebook_get_current_page(GTK_NOTEBOOK(book))<8){gtk_widget_destroy(window);return TRUE;}return FALSE;}
+static gboolean key_press(GtkWidget *w,GdkEventKey *event,gpointer data){(void)w;(void)data;if(event->keyval==GDK_Escape&&gtk_notebook_get_current_page(GTK_NOTEBOOK(book))!=7&&gtk_notebook_get_current_page(GTK_NOTEBOOK(book))!=8){gtk_widget_destroy(window);return TRUE;}return FALSE;}
 static void category_changed(GtkTreeSelection *selection,gpointer data){(void)data;GtkTreeIter it;GtkTreeModel *model;if(gtk_tree_selection_get_selected(selection,&model,&it)){int p;gtk_tree_model_get(model,&it,1,&p,-1);gtk_notebook_set_current_page(GTK_NOTEBOOK(book),p);}}
-static void category_page(GtkNotebook *notebook,GtkNotebookPage *page_widget,guint p,gpointer data){(void)notebook;(void)page_widget;(void)data;GtkTreePath *path=gtk_tree_path_new_from_indices((int)p,-1);gtk_tree_selection_select_path(gtk_tree_view_get_selection(GTK_TREE_VIEW(categories)),path);gtk_tree_path_free(path);if(keyboard_footer)gtk_widget_set_visible(keyboard_footer,p>=8);}
+static void category_page(GtkNotebook *notebook,GtkNotebookPage *page_widget,guint p,gpointer data){(void)notebook;(void)page_widget;(void)data;GtkTreePath *path=gtk_tree_path_new_from_indices((int)p,-1);gtk_tree_selection_select_path(gtk_tree_view_get_selection(GTK_TREE_VIEW(categories)),path);gtk_tree_path_free(path);if(keyboard_footer)gtk_widget_set_visible(keyboard_footer,p==7||p==8);}
 #include "keyboard_ui.h"
 #include "sounds_tabs_ui.h"
+static gboolean settings_navigation_check(gpointer data){
+ (void)data;XEvent e;memset(&e,0,sizeof e);e.type=ClientMessage;e.xclient.message_type=XInternAtom(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),"_DOVEOS_SETTINGS_PAGE",False);
+ for(int i=0;i<10;i++){e.xclient.data.l[0]=i;settings_page_event(&e,NULL,NULL);if(gtk_notebook_get_current_page(GTK_NOTEBOOK(book))!=settings_legacy_pages[i])g_error("Legacy settings page mismatch: %d",i);}
+ for(int i=0;i<10;i++){gtk_notebook_set_current_page(GTK_NOTEBOOK(book),i);if(gtk_widget_get_visible(keyboard_footer)!=(i==7||i==8))g_error("Keyboard footer mismatch: %d",i);}
+ GtkTreeIter it;gchar *name=NULL;if(!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(category_model),&it,NULL,9))g_error("Missing final System category");gtk_tree_model_get(GTK_TREE_MODEL(category_model),&it,0,&name,-1);if(strcmp(name,"System"))g_error("System is not last");g_free(name);
+ printf("SETTINGS_NAVIGATION_PASS legacy_pages=10 category_pages=10 system_last=1 keyboard_footer=correct\n");gtk_widget_destroy(window);return FALSE;
+}
 static gboolean settings_smoke(gpointer data){
  (void)data;static int step;const int pages[]={0,1,3,9};
- if(step>0){GdkPixbuf *image=gdk_pixbuf_get_from_drawable(NULL,gtk_widget_get_window(window),gtk_widget_get_colormap(window),0,0,0,0,window->allocation.width,window->allocation.height);if(image){char path[90];snprintf(path,sizeof path,"/tmp/doveos-settings-preview-%d.png",pages[step-1]);gdk_pixbuf_save(image,path,"png",NULL,NULL);g_object_unref(image);}}
+ if(step>0){gtk_widget_queue_draw(window);gdk_window_process_updates(gtk_widget_get_window(window),TRUE);GdkPixbuf *image=gdk_pixbuf_get_from_drawable(NULL,gtk_widget_get_window(window),gtk_widget_get_colormap(window),0,0,0,0,window->allocation.width,window->allocation.height);if(image){char path[90];snprintf(path,sizeof path,"/tmp/doveos-settings-preview-%d.png",pages[step-1]);gdk_pixbuf_save(image,path,"png",NULL,NULL);g_object_unref(image);}}
  if(step<4){gtk_notebook_set_current_page(GTK_NOTEBOOK(book),pages[step]);step++;return TRUE;}
  printf("SETTINGS_SDK_1_1_CHECK pages=%d fn_controls=0 window=%dx%d\n",gtk_notebook_get_n_pages(GTK_NOTEBOOK(book)),window->allocation.width,window->allocation.height);
  printf("AUDIO_UI_CHECK selectors=0 output_buttons=Stereo,Left,Right microphone_test=5s\n");
@@ -582,18 +592,18 @@ int main(int argc,char **argv){
       if(logo){gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(about),logo);g_object_unref(logo);}
       gtk_dialog_run(GTK_DIALOG(about));gtk_widget_destroy(about);return 0;
     }
-    window=dove_form("Control Panel - DoveOS",860,580);dove_window_fit(window,860,580);gtk_window_set_icon_from_file(GTK_WINDOW(window),"/etc/doveos/classic-icons/48/preferences-system.png",NULL);
+    window=dove_form("Settings - DoveOS",860,580);dove_window_fit(window,860,580);gtk_window_set_icon_from_file(GTK_WINDOW(window),"/etc/doveos/classic-icons/48/preferences-system.png",NULL);
     gtk_window_set_wmclass(GTK_WINDOW(window),"DoveSettings","DoveSettings");
     g_signal_connect(window,"destroy",G_CALLBACK(gtk_main_quit),NULL);g_signal_connect(window,"key-press-event",G_CALLBACK(key_press),NULL);
     GtkWidget *outer=dove_panel(FALSE,6);gtk_container_set_border_width(GTK_CONTAINER(outer),8);gtk_container_add(GTK_CONTAINER(window),outer);
-    GtkWidget *header=dove_panel(TRUE,10);add(outer,header);add(header,dove_image("/etc/doveos/classic-icons/32/preferences-system.png"));GtkWidget *title=label("Control Panel");gtk_label_set_markup(GTK_LABEL(title),"<b>Control Panel</b>\nChoose a category to change your DoveOS settings.");add(header,title);
+    GtkWidget *header=dove_panel(TRUE,10);add(outer,header);add(header,dove_image("/etc/doveos/classic-icons/32/preferences-system.png"));GtkWidget *title=label("Settings");gtk_label_set_markup(GTK_LABEL(title),"<b>DoveOS Settings</b>\nDevices, connections and desktop preferences.");add(header,title);
     GtkWidget *body=dove_panel(TRUE,8);gtk_box_pack_start(GTK_BOX(outer),body,TRUE,TRUE,0);
-    category_model=gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_INT);const char *names[]={"Settings"};categories=dove_listview(GTK_TREE_MODEL(category_model),names,1);gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(categories),FALSE);gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(categories),FALSE);GtkWidget *navigation=dove_scrolled(categories,155,-1);gtk_box_pack_start(GTK_BOX(body),navigation,FALSE,TRUE,0);
+    category_model=gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_INT);const char *names[]={"Settings"};categories=dove_listview(GTK_TREE_MODEL(category_model),names,1);gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(categories),FALSE);gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(categories),FALSE);GtkWidget *navigation=dove_scrolled(categories,160,-1);gtk_box_pack_start(GTK_BOX(body),navigation,FALSE,TRUE,0);
     book=dove_tabs();gtk_notebook_set_show_tabs(GTK_NOTEBOOK(book),FALSE);gtk_notebook_set_show_border(GTK_NOTEBOOK(book),FALSE);gtk_box_pack_start(GTK_BOX(body),book,TRUE,TRUE,0);
     g_signal_connect(gtk_tree_view_get_selection(GTK_TREE_VIEW(categories)),"changed",G_CALLBACK(category_changed),NULL);g_signal_connect(book,"switch-page",G_CALLBACK(category_page),NULL);
-    GtkWidget *box=page("Network");ethernet_status=label("");add(box,ethernet_status);button(box,"Enable / disable Ethernet","ethernet-toggle");wifi_status=label("");add(box,wifi_status);
+    GtkWidget *network_page=page("Network"),*box=settings_group(network_page,"Ethernet");ethernet_status=label("");add(box,ethernet_status);button(box,"Enable / disable Ethernet","ethernet-toggle");box=settings_group(network_page,"Wi-Fi");wifi_status=label("");add(box,wifi_status);
     GtkWidget *row=gtk_hbox_new(FALSE,8);add(box,row);button(row,"Find Wi-Fi networks","wifi-scan");button(row,"Reconnect saved network","wifi-reconnect");button(row,"Disconnect","wifi-disconnect");
-    wifi_list_info=label("");add(box,wifi_list_info);const char *wifi_columns[]={"Network","Band","Strength","Channel","Security","Status"};wifi_list=device_list(box,wifi_columns,6);
+    wifi_list_info=label("");add(box,wifi_list_info);const char *wifi_columns[]={"Network","Band","Strength","Channel","Security","Status"};wifi_list=device_list(box,wifi_columns,6);gtk_widget_set_size_request(gtk_widget_get_parent(wifi_list),-1,140);
     gtk_widget_set_tooltip_text(wifi_list,"Signal nearer 0 dBm is stronger. Channel, strength and security describe the strongest detected access point for each network. Missing scan details are shown as Unknown.");
     row=gtk_hbox_new(FALSE,8);add(box,row);GtkWidget *join=gtk_button_new_with_label("Connect..."),*other=gtk_button_new_with_label("Other network...");add(row,join);add(row,other);g_signal_connect(join,"clicked",G_CALLBACK(join_wifi),NULL);g_signal_connect(other,"clicked",G_CALLBACK(join_wifi),GINT_TO_POINTER(1));
     box=page("Bluetooth");
@@ -632,7 +642,6 @@ int main(int argc,char **argv){
     auto_time=gtk_check_button_new_with_label("Automatically synchronize Internet time");add(box,auto_time);char automatic[8];read_line(CLOCK_HOME "time-auto.txt",automatic,sizeof automatic);gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(auto_time),strcmp(automatic,"0")!=0);g_signal_connect(auto_time,"toggled",G_CALLBACK(online_changed),NULL);
     button(box,"Synchronize now","time-sync");char sync_status[160];read_line("/tmp/doveos-time-status",sync_status,sizeof sync_status);add(box,label(sync_status[0]?sync_status:"Internet time sync starts automatically when online."));
     add(box,label("Date, time zone and clock format are saved on USB.\nAfter a clock reset, the saved time is restored, then corrected online.\nOffline accuracy while powered off depends on the dock's hardware clock."));
-    box=page("System");add(box,label("DoveOS 2 - DoveOS SDK 2\nHP Elite x3 Lap Dock"));add(box,label("Applications run from USB using the existing Linux kernel."));add(box,label("DoveOS SDK 2 Preview includes C templates, layouts and reusable GTK2 controls."));
     box=page("Battery & Power");DovePower power=dove_power_load();
     add(box,label("Display timeouts after inactivity:"));
     add(box,label("Both timers start from your last keyboard, touchpad or mouse activity.\nWaking restores your chosen brightness; dimming does not change it."));
@@ -645,14 +654,16 @@ int main(int argc,char **argv){
     power_status=label("");add(box,power_status);
     add(box,label("Touchpad movement or a key restores the same desktop.\nDimming and screen-off control the hardware backlight.\nLinux stays running; suspend is disabled.\nSettings are saved on USB. Streaming sessions remain awake."));
     keyboard_pages();
+    box=page("System");system_build(box);
     keyboard_footer=dove_panel(FALSE,0);add(outer,keyboard_footer);kb_add_apply(keyboard_footer);
     status=label("Ready.");GtkWidget *frame=dove_groupbox(NULL);gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);gtk_container_add(GTK_CONTAINER(frame),status);add(outer,frame);
     load_wifi();load_bt();list_refresh();tick(NULL);g_timeout_add(350,tick,NULL);bt_status_poll(NULL);g_timeout_add(2000,bt_status_poll,NULL);
     gtk_widget_show_all(window);
     gdk_window_add_filter(gtk_widget_get_window(window),settings_page_event,NULL);
-    if(argc>1){const char *pages[]={"network","bluetooth","display","sound","controls","datetime","system","battery","keyboard","language"};for(int i=0;i<10;i++)if(!strcmp(argv[1],pages[i]))gtk_notebook_set_current_page(GTK_NOTEBOOK(book),i);}
-    gtk_widget_set_visible(keyboard_footer,gtk_notebook_get_current_page(GTK_NOTEBOOK(book))>=8);
+    if(argc>1){const char *pages[]={"network","bluetooth","display","sound","controls","datetime","battery","keyboard","language","system"};for(int i=0;i<10;i++)if(!strcmp(argv[1],pages[i]))gtk_notebook_set_current_page(GTK_NOTEBOOK(book),i);}
+    gtk_widget_set_visible(keyboard_footer,(gtk_notebook_get_current_page(GTK_NOTEBOOK(book))==7||gtk_notebook_get_current_page(GTK_NOTEBOOK(book))==8));
     if(argc>1&&!strcmp(argv[1],"--sound-smoke-test"))dove_timer(500,sounds_smoke,NULL);
     if(argc>1&&!strcmp(argv[1],"--smoke-test"))dove_timer(500,settings_smoke,NULL);
+    if(argc>1&&!strcmp(argv[1],"--navigation-check"))dove_timer(500,settings_navigation_check,NULL);
     gtk_main();return 0;
 }

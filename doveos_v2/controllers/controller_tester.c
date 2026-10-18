@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "doveos.h"
+#include "dove_ui_layout.h"
 #include <linux/input.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
@@ -213,12 +214,12 @@ static void rumble_clicked(GtkWidget *widget, gpointer data) {
 }
 int main(int argc, char **argv) {
     gtk_init(&argc, &argv);
-    window = dove_form("DoveOS Controller Tester", 680, 540);
+    window = dove_form("Controller Tester", 660, 480);
     gtk_window_set_icon_from_file(GTK_WINDOW(window), "/media/usb0/DoveOS-v2/ClassicApps/icons/controller-48.png", NULL);
     GtkWidget *box = dove_panel(FALSE, 6); gtk_container_set_border_width(GTK_CONTAINER(box), 12);
     gtk_container_add(GTK_CONTAINER(window), box);
-    dove_add(box, dove_label("Controller input tester - sticks, triggers, D-pad and buttons"));
-    GtkWidget *row = dove_panel(TRUE, 8); dove_add(box, row);
+    ui_header(box,"Controller Tester","Check sticks, triggers, buttons and vibration.","/media/usb0/DoveOS-v2/ClassicApps/icons/controller-48.png");
+    GtkWidget *row = dove_panel(TRUE, 8); ui_pack(box, row);
     devices = gtk_combo_box_text_new(); gtk_box_pack_start(GTK_BOX(row), devices, TRUE, TRUE, 0);
     GtkWidget *reload = dove_button("Refresh"); dove_add(row, reload);
     GtkWidget *rumble = dove_button("Rumble (1 sec)"); dove_add(row, rumble);
@@ -228,13 +229,13 @@ int main(int argc, char **argv) {
     GtkWidget *axis_scroll = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(axis_scroll), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(axis_scroll), axis_box);
-    gtk_widget_set_size_request(axis_scroll, 360, 300); gtk_box_pack_start(GTK_BOX(body), axis_scroll, TRUE, TRUE, 0);
+    gtk_widget_set_size_request(axis_scroll, 330, 260); GtkWidget *axis_frame=gtk_frame_new("Sticks & triggers");gtk_container_add(GTK_CONTAINER(axis_frame),axis_scroll);gtk_box_pack_start(GTK_BOX(body), axis_frame, TRUE, TRUE, 0);
     buttons = gtk_list_store_new(3, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING);
     GtkWidget *view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(buttons));
     for (int col = 1; col <= 2; col++) gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(view), -1, col == 1 ? "Button" : "State", gtk_cell_renderer_text_new(), "text", col, NULL);
-    gtk_box_pack_start(GTK_BOX(body), dove_scrolled(view, 240, 300), TRUE, TRUE, 0);
-    status = dove_label("Starting..."); dove_add(box, status);
-    dove_add(box, dove_label("Button labels follow Linux codes. Rumble sends a short vibration; no exclusive input grab."));
+    GtkWidget *button_frame=gtk_frame_new("Buttons & D-pad");gtk_container_add(GTK_CONTAINER(button_frame),dove_scrolled(view,230,260));gtk_box_pack_start(GTK_BOX(body),button_frame,TRUE,TRUE,0);
+    status=ui_status(box,"Connect a USB controller or pair one with Bluetooth.");
+    gtk_widget_set_tooltip_text(rumble,"Sends one second of vibration when supported by the selected controller.");
     g_signal_connect(devices, "changed", G_CALLBACK(select_device), NULL);
     g_signal_connect(reload, "clicked", G_CALLBACK(refresh), NULL);
     g_signal_connect(window, "destroy", G_CALLBACK(finish), NULL);

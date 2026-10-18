@@ -120,7 +120,7 @@ if [ "$ready" != 1 ];then
  exit 5
 fi
 echo 'Listening as DoveAir. Use Screen Mirroring on the same network.'
-echo 'Ctrl+Alt+Shift+Q returns to DoveOS. Preview stops after 30 minutes.'
+echo 'Ctrl+Alt+Shift+Q returns to DoveOS. Receiver stops after 30 minutes.'
 previous_geometry=
 while [ ! -e "$STOP" ] && kill -0 "$receiver" 2>/dev/null && kill -0 "$bridge" 2>/dev/null;do
  geometry=$(tail -400 /tmp/doveos-airplay-video.log | sed -n 's/.*AIRPLAY_DECODER_STARTED.*visible=//p' | tail -1)

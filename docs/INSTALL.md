@@ -42,7 +42,7 @@ Files, Terminal, Settings, Moonlight, DoveDeX, DoveAir, DoveCast, DovePlayer, Lo
 
 ## Status and troubleshooting
 
-This is a release candidate. The updated UI passed checks on the original dock, and the new USB passed its file scan. A physical boot check of this updated spare remains pending.
+This is a release candidate. Manual download, extraction, image writing and boot on a spare USB have now been completed successfully on the tested Lap Dock. The updated UI passed checks on the original dock, and the new USB passed its file scan. Other board and firmware revisions remain unverified.
 
 If startup fails, check power, leave the left port empty, verify the image and try a healthy USB written again from the verified image. Preserve the working installation.
 

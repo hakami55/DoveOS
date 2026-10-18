@@ -1,5 +1,6 @@
 #define _GNU_SOURCE
 #include "doveos.h"
+#include "dove_ui_layout.h"
 #include <stdio.h>
 #include <signal.h>
 #include <sys/wait.h>
@@ -60,7 +61,7 @@ static void browse(GtkWidget *w,gpointer p){
  for(int i=0;patterns[i];i++)gtk_file_filter_add_pattern(filter,patterns[i]);
  gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
  GtkFileFilter *all=gtk_file_filter_new();gtk_file_filter_set_name(all,"All files");gtk_file_filter_add_pattern(all,"*");gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),all);
- gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),"/media/usb0/DrMoSa/Media");
+ gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),"/media/usb0/User/Media");
  if(gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_ACCEPT){gchar *path=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));gtk_entry_set_text(GTK_ENTRY(filebox),path);g_free(path);position=duration=0;gtk_button_set_label(GTK_BUTTON(playbutton),"Play");status_text("Ready. Video opens fullscreen at up to 720p.");sensitivity();}
  gtk_widget_destroy(dialog);
 }
@@ -74,16 +75,18 @@ static void details(GtkWidget *w,gpointer p){
 }
 static gboolean close_window(GtkWidget *w,GdkEvent *e,gpointer p){(void)w;(void)e;(void)p;if(child){closing=1;command(SIGTERM);status_text("Stopping playback...");return TRUE;}gtk_main_quit();return TRUE;}
 int main(int argc,char **argv){
- gtk_init(&argc,&argv);window=dove_window("DovePlayer",620,270);gtk_container_set_border_width(GTK_CONTAINER(window),10);
- GtkWidget *box=dove_panel(FALSE,5);gtk_container_add(GTK_CONTAINER(window),box);
- dove_add(box,dove_label("DovePlayer"));
- GtkWidget *row=dove_panel(TRUE,6);filebox=dove_textbox(argc>1?argv[1]:"");browsebutton=dove_button("Open file...");gtk_box_pack_start(GTK_BOX(row),filebox,TRUE,TRUE,0);dove_add(row,browsebutton);dove_add(box,row);
- dove_add(box,dove_label("Video: fullscreen, up to 720p60. Space pauses; Esc stops.\nPreview: 16:9 H.264 video at 720p or lower, plus audio files."));
- GtkWidget *frame=dove_groupbox("Playback"),*inner=dove_panel(FALSE,3);gtk_container_set_border_width(GTK_CONTAINER(inner),7);gtk_container_add(GTK_CONTAINER(frame),inner);dove_add(box,frame);
- slider=dove_slider(TRUE,0,1,1);gtk_scale_set_draw_value(GTK_SCALE(slider),FALSE);dove_add(inner,slider);
+ gtk_init(&argc,&argv);window=dove_window("DovePlayer",600,290);gtk_container_set_border_width(GTK_CONTAINER(window),12);
+ gtk_window_set_wmclass(GTK_WINDOW(window),"doveplayer-ui","DovePlayer");
+ GtkWidget *box=dove_panel(FALSE,9);gtk_container_add(GTK_CONTAINER(window),box);
+ ui_header(box,"DovePlayer","Play local video and audio.","/etc/doveos/classic-icons/32/video-display.png");
+ GtkWidget *files=ui_group(box,"Media file"),*row=dove_panel(TRUE,6);filebox=dove_textbox(argc>1?argv[1]:"");browsebutton=dove_button("Open file...");gtk_box_pack_start(GTK_BOX(row),filebox,TRUE,TRUE,0);dove_add(row,browsebutton);ui_pack(files,row);
+ gtk_widget_set_tooltip_text(filebox,"Choose a local video or audio file. Video support: 16:9 H.264, up to 720p60.");
+ GtkWidget *inner=ui_group(box,"Playback");
+ slider=dove_slider(TRUE,0,1,1);gtk_scale_set_draw_value(GTK_SCALE(slider),FALSE);ui_pack(inner,slider);
  row=dove_panel(TRUE,6);playbutton=dove_button("Play");pausebutton=dove_button("Pause");stopbutton=dove_button("Stop");GtkWidget *info=dove_button("Details");
- dove_add(row,playbutton);dove_add(row,pausebutton);dove_add(row,stopbutton);time_label=dove_label("00:00 / 00:00");gtk_box_pack_start(GTK_BOX(row),time_label,TRUE,TRUE,8);dove_add(row,info);dove_add(inner,row);
- status=dove_label("Choose a local video or audio file.");dove_add(box,status);
+ dove_add(row,playbutton);dove_add(row,pausebutton);dove_add(row,stopbutton);time_label=ui_text("00:00 / 00:00");gtk_box_pack_start(GTK_BOX(row),time_label,TRUE,TRUE,8);dove_add(row,info);ui_pack(inner,row);
+ ui_pack(inner,ui_text("Fullscreen video: Space pauses; Esc stops."));
+ status=ui_status(box,"Choose a file to begin.");
  g_signal_connect(browsebutton,"clicked",G_CALLBACK(browse),NULL);g_signal_connect(playbutton,"clicked",G_CALLBACK(play),NULL);g_signal_connect(pausebutton,"clicked",G_CALLBACK(pause_clicked),NULL);g_signal_connect(stopbutton,"clicked",G_CALLBACK(stop_clicked),NULL);g_signal_connect(info,"clicked",G_CALLBACK(details),NULL);g_signal_connect(slider,"value-changed",G_CALLBACK(slider_changed),NULL);g_signal_connect(filebox,"changed",G_CALLBACK(file_changed),NULL);g_signal_connect(window,"delete-event",G_CALLBACK(close_window),NULL);
  sensitivity();dove_timer(250,read_state,NULL);gtk_widget_show_all(window);gtk_main();return 0;
 }

@@ -43,11 +43,11 @@ static int dove_power_dialog(int preview) {
  gtk_window_set_wmclass(GTK_WINDOW(dialog),"DovePower","DovePower");
  gtk_window_set_position(GTK_WINDOW(dialog),GTK_WIN_POS_CENTER);
  gtk_window_set_resizable(GTK_WINDOW(dialog),FALSE);
- gtk_window_set_icon_from_file(GTK_WINDOW(dialog),"/etc/doveos/dove-start.png",NULL);
+ gtk_window_set_icon_from_file(GTK_WINDOW(dialog),"/media/usb0/DoveOS-v2/UIRefresh/power-48.png",NULL);
  gtk_dialog_set_default_response(GTK_DIALOG(dialog),GTK_RESPONSE_CANCEL);
  GtkWidget *content=gtk_dialog_get_content_area(GTK_DIALOG(dialog));gtk_container_set_border_width(GTK_CONTAINER(content),14);
  GtkWidget *row=gtk_hbox_new(FALSE,16);gtk_box_pack_start(GTK_BOX(content),row,TRUE,TRUE,0);
- GtkWidget *icon=gtk_image_new_from_file("/etc/doveos/classic-icons/48/preferences-system.png");
+ GtkWidget *icon=gtk_image_new_from_file("/media/usb0/DoveOS-v2/UIRefresh/power-48.png");
  GtkWidget *align=gtk_alignment_new(0,0,0,0);gtk_container_add(GTK_CONTAINER(align),icon);gtk_box_pack_start(GTK_BOX(row),align,FALSE,FALSE,0);
  GtkWidget *body=gtk_vbox_new(FALSE,7);gtk_box_pack_start(GTK_BOX(row),body,TRUE,TRUE,0);
  GtkWidget *prompt=gtk_label_new("What do you want DoveOS to do?");gtk_misc_set_alignment(GTK_MISC(prompt),0,0.5);gtk_box_pack_start(GTK_BOX(body),prompt,FALSE,FALSE,3);
@@ -68,7 +68,7 @@ static int dove_power_dialog(int preview) {
  gtk_box_pack_start(GTK_BOX(body),gtk_hseparator_new(),FALSE,FALSE,3);
  gtk_box_pack_start(GTK_BOX(body),description,FALSE,FALSE,0);
  gtk_widget_show_all(dialog);
- if(preview){while(gtk_events_pending())gtk_main_iteration();g_usleep(300000);printf("POWER_MENU choices=5 shutdown_disabled=%d mode=%s\n",!gtk_widget_get_sensitive(options[4]),actions[2]);gtk_widget_destroy(dialog);return 0;}
+ if(preview){while(gtk_events_pending())gtk_main_iteration();g_usleep(300000);const char *path=getenv("DOVEOS_PREVIEW_IMAGE");if(path){GdkPixbuf *image=gdk_pixbuf_get_from_drawable(NULL,gtk_widget_get_window(dialog),gtk_widget_get_colormap(dialog),0,0,0,0,dialog->allocation.width,dialog->allocation.height);if(image){gdk_pixbuf_save(image,path,"png",NULL,NULL);g_object_unref(image);}}printf("POWER_MENU choices=5 shutdown_disabled=%d mode=%s\n",!gtk_widget_get_sensitive(options[4]),actions[2]);gtk_widget_destroy(dialog);return 0;}
  int response;const char *action=NULL;
  for(;;){
   response=gtk_dialog_run(GTK_DIALOG(dialog));

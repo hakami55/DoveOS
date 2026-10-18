@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=HDMI In
+Comment=Watch HDMI picture and sound
+Exec=/tmp/doveos-theme/doveos-open doveos-hdmi-test /bin/sh /media/usb0/DoveOS-v2/Capture/Test/test-launch.sh
+Icon=/etc/doveos/classic-icons/48/video-display.png
+Terminal=false
+Categories=AudioVideo;Video;

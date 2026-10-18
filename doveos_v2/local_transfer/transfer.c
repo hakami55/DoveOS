@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 #define _FILE_OFFSET_BITS 64
 #include "doveos.h"
+#include "dove_ui_layout.h"
 #include <gio/gio.h>
 #include <glib-unix.h>
 #include "qr/qrcodegen.h"
@@ -20,7 +21,7 @@
 #include <string.h>
 #include <stdint.h>
 #define MAX_FILE ((guint64)4294967295ULL)
-#define DEFAULT_FOLDER "/media/usb0/DrMoSa/Downloads/Local Transfer"
+#define DEFAULT_FOLDER "/media/usb0/User/Downloads/Local Transfer"
 typedef struct {
  GMutex lock;GSocketService *service;GHashTable *clients,*pending;int rootfd,port;gint running,active,copying;
  gchar *folder,*token,*last;GtkWidget *window,*qr_box,*url,*address,*folder_entry,*status,*start,*choose,*add;
@@ -234,22 +235,26 @@ static gboolean close_ready(gpointer unused){(void)unused;if(g_atomic_int_get(&a
 static gboolean close_app(GtkWidget *widget,GdkEvent *event,gpointer unused){(void)widget;(void)event;(void)unused;if(!app.closing){app.closing=TRUE;stop_server();gtk_widget_hide(app.window);g_timeout_add(100,close_ready,NULL);}return TRUE;}
 static gboolean signal_stop(gpointer unused){(void)unused;stop_server();g_timeout_add(100,close_ready,NULL);return G_SOURCE_REMOVE;}
 static void ui(void) {
- app.window=dove_form("Local Transfer",650,390);gtk_window_set_wmclass(GTK_WINDOW(app.window),"doveos-transfer","DoveTransfer");gtk_window_set_position(GTK_WINDOW(app.window),GTK_WIN_POS_CENTER);gtk_window_set_resizable(GTK_WINDOW(app.window),FALSE);
- GtkWidget *outer=dove_panel(FALSE,9);gtk_container_set_border_width(GTK_CONTAINER(outer),12);gtk_container_add(GTK_CONTAINER(app.window),outer);dove_add(outer,dove_label("Send and receive files with a browser on your PC, iPhone or Android."));
+ app.window=dove_form("Local Transfer",670,430);gtk_window_set_wmclass(GTK_WINDOW(app.window),"doveos-transfer","DoveTransfer");gtk_window_set_position(GTK_WINDOW(app.window),GTK_WIN_POS_CENTER);
+ GtkWidget *outer=dove_panel(FALSE,9);gtk_container_set_border_width(GTK_CONTAINER(outer),12);gtk_container_add(GTK_CONTAINER(app.window),outer);
+ ui_header(outer,"Local Transfer","Send and receive files on your local network.","/media/usb0/DoveOS-v2/Transfer/transfer.png");
  GtkWidget *row=dove_panel(TRUE,14);gtk_box_pack_start(GTK_BOX(outer),row,TRUE,TRUE,0);app.qr_box=gtk_frame_new(NULL);gtk_frame_set_shadow_type(GTK_FRAME(app.qr_box),GTK_SHADOW_IN);gtk_widget_set_size_request(app.qr_box,228,228);gtk_box_pack_start(GTK_BOX(row),app.qr_box,FALSE,FALSE,0);
- GtkWidget *right=dove_panel(FALSE,7);gtk_box_pack_start(GTK_BOX(row),right,TRUE,TRUE,0);dove_add(right,dove_label("1. Connect both devices to the same Wi-Fi or router.\n2. Scan the QR code or open the link in a browser.\n3. Send files, or choose Download."));
- app.address=gtk_combo_box_text_new();dove_add(right,app.address);g_signal_connect(app.address,"changed",G_CALLBACK(update_link),NULL);
- app.url=dove_textbox("");gtk_editable_set_editable(GTK_EDITABLE(app.url),FALSE);dove_add(right,app.url);GtkWidget *buttons=dove_panel(TRUE,6);dove_add(right,buttons);GtkWidget *copy=dove_button("Copy link");dove_add(buttons,copy);g_signal_connect(copy,"clicked",G_CALLBACK(copy_link),NULL);app.start=dove_button("Stop transfer");dove_add(buttons,app.start);g_signal_connect(app.start,"clicked",G_CALLBACK(toggle),NULL);
- dove_add(right,dove_label("Only the shared folder below is available.\nClosing this app stops the transfer link."));
- GtkWidget *folder=dove_panel(TRUE,6);gtk_box_pack_start(GTK_BOX(outer),folder,FALSE,FALSE,0);dove_add(folder,dove_label("Shared folder:"));app.folder_entry=dove_textbox(app.folder);gtk_editable_set_editable(GTK_EDITABLE(app.folder_entry),FALSE);gtk_box_pack_start(GTK_BOX(folder),app.folder_entry,TRUE,TRUE,0);app.choose=dove_button("Choose...");dove_add(folder,app.choose);g_signal_connect(app.choose,"clicked",G_CALLBACK(choose),NULL);
- GtkWidget *actions=dove_panel(TRUE,6);dove_add(outer,actions);app.add=dove_button("Add files...");dove_add(actions,app.add);g_signal_connect(app.add,"clicked",G_CALLBACK(add_files),NULL);GtkWidget *open=dove_button("Open folder");dove_add(actions,open);g_signal_connect(open,"clicked",G_CALLBACK(open_folder),NULL);app.status=dove_label("Starting...");gtk_box_pack_start(GTK_BOX(actions),app.status,TRUE,TRUE,0);
- g_signal_connect(app.window,"delete-event",G_CALLBACK(close_app),NULL);gtk_widget_show_all(app.window);refresh(NULL);app.monitor=g_timeout_add_seconds(2,refresh,NULL);
+ GtkWidget *right=dove_panel(FALSE,8);gtk_box_pack_start(GTK_BOX(row),right,TRUE,TRUE,0);
+ ui_pack(right,ui_text("1. Use the same Wi-Fi or router."));ui_pack(right,ui_text("2. Scan the code or open the link."));ui_pack(right,ui_text("3. Upload or download your files."));
+ ui_pack(right,ui_text("Network connection"));app.address=gtk_combo_box_text_new();ui_pack(right,app.address);g_signal_connect(app.address,"changed",G_CALLBACK(update_link),NULL);
+ app.url=dove_textbox("");gtk_editable_set_editable(GTK_EDITABLE(app.url),FALSE);ui_pack(right,app.url);
+ GtkWidget *buttons=dove_panel(TRUE,6);ui_pack(right,buttons);GtkWidget *copy=dove_button("Copy link");dove_add(buttons,copy);g_signal_connect(copy,"clicked",G_CALLBACK(copy_link),NULL);app.start=dove_button("Stop transfer");dove_add(buttons,app.start);g_signal_connect(app.start,"clicked",G_CALLBACK(toggle),NULL);
+ ui_pack(right,ui_text("Only the shared folder is available."));ui_pack(right,ui_text("Closing this window stops sharing."));
+ GtkWidget *shared=ui_group(outer,"Shared folder"),*folder=dove_panel(TRUE,6);ui_pack(shared,folder);app.folder_entry=dove_textbox(app.folder);gtk_editable_set_editable(GTK_EDITABLE(app.folder_entry),FALSE);gtk_box_pack_start(GTK_BOX(folder),app.folder_entry,TRUE,TRUE,0);app.choose=dove_button("Choose...");dove_add(folder,app.choose);g_signal_connect(app.choose,"clicked",G_CALLBACK(choose),NULL);
+ GtkWidget *actions=dove_panel(TRUE,6);ui_pack(shared,actions);app.add=dove_button("Add files...");dove_add(actions,app.add);g_signal_connect(app.add,"clicked",G_CALLBACK(add_files),NULL);GtkWidget *open=dove_button("Open folder");dove_add(actions,open);g_signal_connect(open,"clicked",G_CALLBACK(open_folder),NULL);
+ app.status=ui_status(outer,"Starting...");g_signal_connect(app.window,"delete-event",G_CALLBACK(close_app),NULL);gtk_widget_show_all(app.window);refresh(NULL);app.monitor=g_timeout_add_seconds(2,refresh,NULL);
 }
 int main(int argc,char **argv) {
  signal(SIGPIPE,SIG_IGN);g_mutex_init(&app.lock);app.clients=g_hash_table_new_full(g_direct_hash,g_direct_equal,g_object_unref,NULL);app.pending=g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
- app.headless=argc>=2&&!strcmp(argv[1],"--serve");const char *folder=app.headless&&argc>=3?argv[2]:DEFAULT_FOLDER;if(app.headless&&argc>=4)app.port=atoi(argv[3]);
+ gboolean preview=argc>=2&&!strcmp(argv[1],"--preview");
+ app.headless=argc>=2&&!strcmp(argv[1],"--serve");const char *folder=app.headless&&argc>=3?argv[2]:(preview?"/tmp/doveos-transfer-ui-preview":DEFAULT_FOLDER);if(app.headless&&argc>=4)app.port=atoi(argv[3]);
  int lock=open(app.headless?"/tmp/doveos-transfer-cli.lock":"/tmp/doveos-local-transfer.lock",O_CREAT|O_RDWR|O_CLOEXEC,0600);if(lock<0||flock(lock,LOCK_EX|LOCK_NB))return 0;
  if(!app.headless){gtk_init(&argc,&argv);g_mkdir_with_parents(folder,0755);}GError *error=NULL;if(!folder_set(folder,&error)){fprintf(stderr,"%s\n",error->message);g_error_free(error);return 1;}
- gboolean started=start_server(&error);if(app.headless){if(!started){fprintf(stderr,"%s\n",error->message);g_error_free(error);return 1;}printf("http://127.0.0.1:%d/%s/\n",app.port,app.token);fflush(stdout);app.loop=g_main_loop_new(NULL,FALSE);g_unix_signal_add(SIGTERM,signal_stop,NULL);g_unix_signal_add(SIGINT,signal_stop,NULL);g_main_loop_run(app.loop);g_main_loop_unref(app.loop);}else{ui();if(!started){dove_message(GTK_WINDOW(app.window),error->message);g_error_free(error);}gtk_main();g_source_remove(app.monitor);gtk_widget_destroy(app.window);}
+ gboolean started=preview?TRUE:start_server(&error);if(app.headless){if(!started){fprintf(stderr,"%s\n",error->message);g_error_free(error);return 1;}printf("http://127.0.0.1:%d/%s/\n",app.port,app.token);fflush(stdout);app.loop=g_main_loop_new(NULL,FALSE);g_unix_signal_add(SIGTERM,signal_stop,NULL);g_unix_signal_add(SIGINT,signal_stop,NULL);g_main_loop_run(app.loop);g_main_loop_unref(app.loop);}else{ui();if(!started){dove_message(GTK_WINDOW(app.window),error->message);g_error_free(error);}gtk_main();g_source_remove(app.monitor);gtk_widget_destroy(app.window);}
  if(app.rootfd>=0)close(app.rootfd);g_hash_table_unref(app.clients);g_hash_table_unref(app.pending);g_free(app.folder);g_free(app.token);g_free(app.last);close(lock);return 0;
 }

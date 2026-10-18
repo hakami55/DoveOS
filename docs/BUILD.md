@@ -26,3 +26,16 @@ runtime packages. See `doveos_v2/build.sh`, `fetch_desktop.py`,
 
 Vendor drivers must come from compatible existing firmware or an authorized
 distribution. Internal firmware dumps and signing/debug keys are not included.
+
+
+## Current frontends
+
+The October 2026 UI sources include `doveos_v2/settings_system.h`, the shared
+`sdk/dove_ui_layout.h` and the `ui_refresh` overlay. Its build script uses
+ImageMagick `convert` to render the included power SVG. The overlay verifies
+its files and copies Settings to RAM because the system USB is mounted noexec.
+Existing runtime and hardware services are retained.
+
+`hdmi_input_study` contains the capture-card frontends. `youtube_cast_study`
+contains the DoveCast frontend and integration sources. Their external runtimes
+and upstream dependencies still require the documented build environment.
